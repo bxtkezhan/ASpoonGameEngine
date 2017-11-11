@@ -1,4 +1,4 @@
-function GameProcess(_ready=null, _process=null) {
+function asge_process(_ready=null, _process=null) {
   var requestAnimationFrame = window.requestAnimationFrame ||
                               window.webkitRequestAnimationFrame ||
                               window.mozRequestAnimationFrame ||
@@ -21,3 +21,7 @@ function GameProcess(_ready=null, _process=null) {
     }
   }
 }
+
+var ASGE = {
+  'Process': asge_process,
+};

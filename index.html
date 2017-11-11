@@ -12,8 +12,8 @@
 <script type="text/javascript">
   var myProcess = null;
   var num = 0
-  loadScript("/libs/gameProcess.js", function () {
-    myProcess = new GameProcess(
+  loadScript(function () {
+    myProcess = new ASGE.Process(
       function () {
         console.log('Ready Function');
       },

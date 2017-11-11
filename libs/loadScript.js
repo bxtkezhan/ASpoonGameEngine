@@ -1,4 +1,4 @@
-function loadScript(url, callback) {
+function loadScript(callback, url='/libs/aSpoon.js') {
   var script = document.createElement("script");
   script.type = "text/javascript";
 
