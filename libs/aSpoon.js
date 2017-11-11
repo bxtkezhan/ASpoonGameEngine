@@ -16,9 +16,7 @@ function asge_process(_ready=null, _process=null) {
 
   this.start = function () {
     if (_ready != null) _ready();
-    if (_process != null) {
-      system_process();
-    }
+    if (_process != null) system_process();
   }
 }
 
