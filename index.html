@@ -23,6 +23,8 @@
         console.log('Delta: ' + delta + ' Num: ' + num);
       }
     );
-    // myProcess.start();
+    myProcess.start();
+    console.log('Active status: ' + myProcess.getActive());
+    setTimeout(function () {myProcess.stop()}, 2 * 1000);
   });
 </script>
