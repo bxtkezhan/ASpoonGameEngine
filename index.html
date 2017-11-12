@@ -2,29 +2,36 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title> A Spoon Game Engine </title>
+    <title>A Spoon Game Engine</title>
   </head>
   <body>
-
+    <h1 id="test">ASpoon</h1>
   </body>
 </html>
 <script type="text/javascript" src="/libs/loadScript.js"></script>
 <script type="text/javascript">
-  var myProcess = null;
-  var num = 0
   loadScript(function () {
+    var h1Element = document.getElementById('test');
+    h1Element.style.position = 'absolute';
+    var x = 0;
+
+    var myProcess = null;
     myProcess = new ASGE.Process(
       function () {
         console.log('Ready Function');
       },
       function (delta) {
-        num ++;
-        num %= 100
-        console.log('Delta: ' + delta + ' Num: ' + num);
+        h1Element.style.left = x + 'px';
+        console.log(`Delta: ${delta}`);
       }
     );
     myProcess.start();
     console.log('Active status: ' + myProcess.getActive());
-    setTimeout(function () {myProcess.stop()}, 2 * 1000);
+    setTimeout(function () {myProcess.stop()}, 25 * 1000);
+
+    ASGE.setInputEvent('keypress', {
+      'a': (event) => {x -= 10},
+      'd': (event) => {x += 10}});
+    ASGE.setInputEvent('click', (event) => {console.log(event)});
   });
 </script>

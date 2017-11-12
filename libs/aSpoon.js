@@ -47,6 +47,25 @@ function asge_process(_ready=null, _process=null) {
   return asge_process_obj;
 }
 
+function asge_input_event(_event, _params) {
+  keyboard_events = ['keypress'];
+  mouse_touch_events = ['click'];
+
+  if (keyboard_events.includes(_event)) {
+    var _map = _params;
+    document.addEventListener(_event, (event) => {
+      const keyName = event.key;
+      if (keyName in _map) _map[keyName](event);
+    }, false);
+  } else if (mouse_touch_events.includes(_event)) {
+    var callback = _params;
+    document.addEventListener(_event, (event) => {
+      callback(event);
+    });
+  }
+}
+
 var ASGE = {
   'Process': asge_process,
+  'setInputEvent': asge_input_event,
 };
