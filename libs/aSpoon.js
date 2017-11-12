@@ -48,8 +48,9 @@ function asge_process(_ready=null, _process=null) {
 }
 
 function asge_input_event(_event, _params) {
-  keyboard_events = ['keypress'];
-  mouse_touch_events = ['click'];
+  var keyboard_events = ['keydown', 'keyup', 'keypress'];
+  var mouse_events = ['click', 'dblclick', 'mouseup', 'mousedown'];
+  var touch_events = ['touchstart', 'touchend', 'touchmove', 'touchcancel'];
 
   if (keyboard_events.includes(_event)) {
     var _map = _params;
@@ -57,7 +58,7 @@ function asge_input_event(_event, _params) {
       const keyName = event.key;
       if (keyName in _map) _map[keyName](event);
     }, false);
-  } else if (mouse_touch_events.includes(_event)) {
+  } else if (mouse_events.includes(_event) || touch_events.includes(_event)) {
     var callback = _params;
     document.addEventListener(_event, (event) => {
       callback(event);

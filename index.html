@@ -28,11 +28,11 @@
     );
     myProcess.start();
     console.log('Active status: ' + myProcess.getActive());
-    setTimeout(function () {myProcess.stop()}, 25 * 1000);
+    setTimeout(function () {myProcess.stop()}, 15 * 1000);
 
-    ASGE.setInputEvent('keypress', {
-      'a': (event) => {s = -100},
-      'd': (event) => {s = 100}});
+    ASGE.setInputEvent('keyup', {
+      'ArrowLeft': (event) => {s = -100},
+      'ArrowRight': (event) => {s = 100}});
     ASGE.setInputEvent('click', (event) => {console.log(event)});
   });
 </script>
