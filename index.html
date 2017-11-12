@@ -13,7 +13,7 @@
   loadScript(function () {
     var h1Element = document.getElementById('test');
     h1Element.style.position = 'absolute';
-    var x = 0;
+    var x = 0, s = 0;
 
     var myProcess = null;
     myProcess = new ASGE.Process(
@@ -21,6 +21,7 @@
         console.log('Ready Function');
       },
       function (delta) {
+        x += s * delta;
         h1Element.style.left = x + 'px';
         console.log(`Delta: ${delta}`);
       }
@@ -30,8 +31,8 @@
     setTimeout(function () {myProcess.stop()}, 25 * 1000);
 
     ASGE.setInputEvent('keypress', {
-      'a': (event) => {x -= 10},
-      'd': (event) => {x += 10}});
+      'a': (event) => {s = -100},
+      'd': (event) => {s = 100}});
     ASGE.setInputEvent('click', (event) => {console.log(event)});
   });
 </script>
