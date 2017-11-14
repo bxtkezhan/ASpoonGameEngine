@@ -3,36 +3,93 @@
   <head>
     <meta charset="utf-8">
     <title>A Spoon Game Engine</title>
+    <script src="/libs/three.min.js" type="text/javascript"></script>
+    <script src="/libs/stats.min.js" type="text/javascript"></script>
+    <script src="/libs/dat.gui.min.js" type="text/javascript"></script>
+    <script src="/libs/aSpoon.js" type="text/javascript"></script>
   </head>
   <body>
-    <h1 id="test">ASpoon</h1>
   </body>
 </html>
-<script type="text/javascript" src="/libs/loadScript.js"></script>
 <script type="text/javascript">
-  loadScript(function () {
-    var h1Element = document.getElementById('test');
-    h1Element.style.position = 'absolute';
-    var x = 0, s = 0;
+window.onload = function () {
+  function initStats() {
+    var stats = new Stats();
 
-    var myProcess = null;
-    myProcess = new ASGE.Process(
-      function () {
-        console.log('Ready Function');
-      },
-      function (delta) {
-        x += s * delta;
-        h1Element.style.left = x + 'px';
-        console.log(`Delta: ${delta}`);
-      }
-    );
-    myProcess.start();
-    console.log('Active status: ' + myProcess.getActive());
-    setTimeout(function () {myProcess.stop()}, 15 * 1000);
+    stats.setMode(0);
 
-    ASGE.setInputEvent('keyup', {
-      'ArrowLeft': (event) => {s = -100},
-      'ArrowRight': (event) => {s = 100}});
-    ASGE.setInputEvent('click', (event) => {console.log(event)});
-  });
+    stats.domElement.style.position = 'absolute';
+    stats.domElement.style.left = '0px';
+    stats.domElement.style.top = '0px';
+
+    document.body.appendChild(stats.domElement);
+
+    return stats;
+  }
+
+  var stats = initStats();
+
+  var scene, camera, renderer, cube, spotLight;
+
+  var controls = {rotationSpeed: 0.01, spotHeight: 40};
+
+  function _ready() {
+    scene = new THREE.Scene();
+    camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+
+    renderer = new THREE.WebGLRenderer()
+    renderer.setClearColor(new THREE.Color(0xffffff));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.shadowMap.enabled = true;
+
+    var axes = new THREE.AxesHelper(20);
+    scene.add(axes);
+
+    var planeGeometry = new THREE.PlaneGeometry(50, 50, 1, 1);
+    var planeMaterial = new THREE.MeshLambertMaterial({color: 0x7777ff});
+    var plane = new THREE.Mesh(planeGeometry, planeMaterial);
+    plane.receiveShadow = true;
+    plane.rotation.x = -0.5 * Math.PI;
+    scene.add(plane);
+
+    var cubeGeometry = new THREE.BoxGeometry(4, 4, 4);
+    var cubeMaterial = new THREE.MeshLambertMaterial({color: 0x3377ff});
+    cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+    cube.castShadow = true;
+    cube.position.set(0, 4, 0);
+    scene.add(cube);
+
+    var ambientLight = new THREE.AmbientLight(0x0c0c0c);
+    scene.add(ambientLight);
+
+    spotLight = new THREE.SpotLight(0xffffff);
+    spotLight.castShadow = true;
+    spotLight.position.set(0, controls.spotHeight, 0);
+    scene.add(spotLight);
+
+    camera.position.set(30, 40, 30);
+    camera.lookAt(scene.position);
+
+    document.body.appendChild(renderer.domElement);
+
+    var gui = new dat.GUI();
+    gui.add(controls, 'rotationSpeed', 0, 0.1);
+    gui.add(controls, 'spotHeight', 0, 100);
+  }
+
+  function _process() {
+    stats.update();
+
+    spotLight.position.y = controls.spotHeight;
+
+    cube.rotation.x += controls.rotationSpeed;
+    cube.rotation.y += controls.rotationSpeed;
+    cube.rotation.z += controls.rotationSpeed;
+
+    renderer.render(scene, camera);
+  }
+
+  var gameProcess = new ASGE.Process(_ready, _process);
+  gameProcess.start();
+};
 </script>
