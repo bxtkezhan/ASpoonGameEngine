@@ -13,7 +13,7 @@
 </html>
 <script type="text/javascript">
 window.onload = function () {
-  function initStats() {
+  var stats = new function () {
     var stats = new Stats();
 
     stats.setMode(0);
@@ -25,23 +25,11 @@ window.onload = function () {
     document.body.appendChild(stats.domElement);
 
     return stats;
-  }
+  };
+  var cube, spotLight;
+  var controls = {rotationSpeed: 0.1, spotHeight: 40};
 
-  var stats = initStats();
-
-  var scene, camera, renderer, cube, spotLight;
-
-  var controls = {rotationSpeed: 0.01, spotHeight: 40};
-
-  function _ready() {
-    scene = new THREE.Scene();
-    camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
-
-    renderer = new THREE.WebGLRenderer()
-    renderer.setClearColor(new THREE.Color(0xffffff));
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.shadowMap.enabled = true;
-
+  function _ready(scene, camera, renderer) {
     var axes = new THREE.AxesHelper(20);
     scene.add(axes);
 
@@ -73,20 +61,18 @@ window.onload = function () {
     document.body.appendChild(renderer.domElement);
 
     var gui = new dat.GUI();
-    gui.add(controls, 'rotationSpeed', 0, 0.1);
+    gui.add(controls, 'rotationSpeed', 0, 10);
     gui.add(controls, 'spotHeight', 0, 100);
   }
 
-  function _process() {
+  function _process(delta) {
     stats.update();
 
     spotLight.position.y = controls.spotHeight;
 
-    cube.rotation.x += controls.rotationSpeed;
-    cube.rotation.y += controls.rotationSpeed;
-    cube.rotation.z += controls.rotationSpeed;
-
-    renderer.render(scene, camera);
+    cube.rotation.x += controls.rotationSpeed * delta;
+    cube.rotation.y += controls.rotationSpeed * delta;
+    cube.rotation.z += controls.rotationSpeed * delta;
   }
 
   var gameProcess = new ASGE.Process(_ready, _process);
